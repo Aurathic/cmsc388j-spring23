@@ -8,8 +8,7 @@ def hello_world():
     >>> hello_world()
     'Hello, World!'
     """
-    raise NotImplementedError('Please implement this function for full credit')
-
+    return "Hello, World!"
 
 def sum_unique(l):
     """ Sums values in l, not counting duplicates.
@@ -27,8 +26,8 @@ def sum_unique(l):
     >>> sum_unique([2, 2, 2, 2, 1])
     3
     """
-    raise NotImplementedError('Please implement this function for full credit')
-
+    return sum(set(l))
+    
 
 def palindrome(x):
     """ Determines if x, an integer or string, is a palindrome, i.e.
@@ -47,8 +46,7 @@ def palindrome(x):
     >>> palindrome('python')
     False
     """
-    raise NotImplementedError('Please implement this function for full credit')
-
+    return str(x)[::-1]==str(x)
 
 def sum_multiples(num):
     """ Sums up all multiples of 3 and 5 upto and not including num.
@@ -66,8 +64,7 @@ def sum_multiples(num):
     >>> sum_multiples(16) # Multiples: [3, 5, 6, 9, 10, 12, 15]
     60
     """
-    raise NotImplementedError('Please implement this function for full credit')
-
+    return sum(set([*range(0,num,3)]+[*range(0,num,5)]))
 
 def num_func_mapper(nums, funs):
     """Applies each function in funs to the list of numbers, nums, and
@@ -84,8 +81,7 @@ def num_func_mapper(nums, funs):
     >>> num_func_mapper(num_list, f_list)
     [11, 15]
     """
-    raise NotImplementedError('Please implement this function for full credit')
-
+    return [f(nums) for f in funs]
 
 def pythagorean_triples(n):
     """ Finds all pythagorean triples where a, b, and c (sides of the triangle)
@@ -107,8 +103,12 @@ def pythagorean_triples(n):
     >>> pythagorean_triples(20)
     [(3, 4, 5), (6, 8, 10), (5, 12, 13), (9, 12, 15), (8, 15, 17)]
     """
-    raise NotImplementedError('Please implement this function for full credit')
-    
+    return [(a,b,c)
+            for c in range(n)
+            for b in range(c)
+            for a in range(b)
+            if a**2+b**2==c**2]
+
 def custom_sort(lst):
     """ Use Python's built-in sort function to sort the list so that the odd numbers (in the same order as in the original list) come first, and then the even numbers (also in the same order).
 
@@ -118,4 +118,4 @@ def custom_sort(lst):
     [(1, 3, 5, 2, 4)]
     (Hint: use a lambda function) 
     """
-    raise NotImplementedError('Please implement this function for full credit')
+    return sorted(lst,key=lambda elem: elem%2==0)
