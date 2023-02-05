@@ -13,7 +13,7 @@ def index():
     """
     return render_template('index.html')
 
-@app.route()
+@app.route('/pokemon/<pokemon_name>')
 def pokemon_info(pokemon_name):
     """
     Must show all the info for a pokemon identified by name
@@ -22,7 +22,7 @@ def pokemon_info(pokemon_name):
     """
     pass
 
-@app.route()
+@app.route('/ability/<ability_name>')
 def pokemon_with_ability(ability_name):
     """
     Must show a list of pokemon 
