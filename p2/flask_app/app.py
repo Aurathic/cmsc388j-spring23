@@ -11,7 +11,8 @@ def index():
 
     Check the README for more detail.
     """
-    return render_template('index.html')
+    pokemon_list = poke_client.get_pokemon_list()
+    return render_template('index.html', pokemon_list=pokemon_list)
 
 @app.route('/pokemon/<pokemon_name>')
 def pokemon_info(pokemon_name):
@@ -20,7 +21,7 @@ def pokemon_info(pokemon_name):
 
     Check the README for more detail
     """
-    pass
+    return render_template('ability.html',pokemon_name=pokemon_name)
 
 @app.route('/ability/<ability_name>')
 def pokemon_with_ability(ability_name):
@@ -29,4 +30,4 @@ def pokemon_with_ability(ability_name):
 
     Check the README for more detail
     """
-    pass
+    return render_template('ability.html',ability_name=ability_name)
