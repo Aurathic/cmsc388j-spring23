@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2> {{ name }}</h2>
+<p> Weight: {{ weight }} hectograms </p>
+<p> Base Experience On Defeat: {{ base_exp }} </p>
+
+<h3>Moves</h3>
+<ul>
+    {% for move in moves %}
+    <li>{{ move }}</li>
+    {% endfor %}
+</ul>
+
+
+
+<h3>Abilities</h3>
+<ul>
+    {% for ability_name in abilties %}
+    <a href="{{ url_for('pokemon_with_ability', ability_name=ability_name) }}">
+        <li>{{ ability }}</li>
+    </a>
+</ul>
+{% endfor %}
+
+{% endblock %}

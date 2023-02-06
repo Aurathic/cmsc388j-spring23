@@ -2,10 +2,12 @@
 {% block content %}
 <b>Poke-Info website!</b>
 
-{% for pokemon_name in pokemon_list %}
+<ul>
+    {% for pokemon_name in pokemon_list %}
     <a href="{{ url_for('pokemon_info', pokemon_name=pokemon_name) }}">
-        <h3>{{ pokemon_name }}</h3>
+        <li>{{ pokemon_name }}</li>
     </a>
-{% endfor %}
+    {% endfor %}
+</ul>
 
 {% endblock %}

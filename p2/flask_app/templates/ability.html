@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-{% for post in posts %}
-    <a href="{{ url_for('profile', username=post.user) }}"><h3>{{ post.user }}</h3></a>
+<ul>
+    {% for post in posts %}
+    <a href="{{ url_for('profile', username=post.user) }}">
+        <li>{{ post.user }}</li>
+    </a>
     <h4>> {{ post.text }}</h4>
     ❤ <b>{{ post.likes }} &#183; {{ post.location }}</b>
-{% endfor %}
+    {% endfor %}
+</ul>
 {% endblock %}
