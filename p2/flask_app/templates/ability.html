@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ ability_name }}</h2>
-<h3>Pokemon with Ability</h3>
-<ul>
-    {% for pokemon_name in pokemon_with_ability %}
-    <a href="{{ url_for('pokemon_info', pokemon_name=pokemon_name) }}">
-        <li>{{ pokemon_name }}</li>
-    </a>
-    {% endfor %}
-</ul>
+
+<div>
+    <h2>Ability: {{ ability_name.replace("-"," ").title() }}</h2>
+</div>
+
+<div>
+    <h3>Pokemon with Ability</h3>
+    <ul>
+        {% for pokemon_name in pokemon_with_ability %}
+        <a href="{{ url_for('pokemon_info', pokemon_name=pokemon_name) }}">
+            <li>{{ pokemon_name.replace("-"," ").title() }}</li>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

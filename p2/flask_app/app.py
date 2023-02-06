@@ -28,6 +28,7 @@ def pokemon_info(pokemon_name):
     return render_template(
         "pokemon.html",
         name=pokemon_info["name"],
+        height=pokemon_info["height"],
         weight=pokemon_info["weight"],
         base_exp=pokemon_info["base_exp"],
         moves=pokemon_info["moves"],

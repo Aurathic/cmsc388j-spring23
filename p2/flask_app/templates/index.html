@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<b>Poke-Info website!</b>
+<h1>Poke-Info Website</h1>
 
 <ul>
     {% for pokemon_name in pokemon_list %}
     <a href="{{ url_for('pokemon_info', pokemon_name=pokemon_name) }}">
-        <li>{{ pokemon_name }}</li>
+        <li>{{ pokemon_name.replace("-"," ").title() }}</li>
     </a>
     {% endfor %}
 </ul>

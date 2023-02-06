@@ -1,25 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2> {{ name }}</h2>
-<p> Weight: {{ weight }} hectograms </p>
-<p> Base Experience On Defeat: {{ base_exp }} </p>
+<div>
+    <h2> {{ name.replace("-"," ").title() }}</h2>
+    <p> <b>Height:</b> {{ height }} decimeters </p>
+    <p> <b>Weight:</b> {{ weight }} hectograms </p>
+    <p> <b>Base Experience On Defeat:</b> {{ base_exp }} XP </p>
+</div>
 
-<h3>Moves</h3>
-<ul>
-    {% for move in moves %}
-    <li>{{ move }}</li>
-    {% endfor %}
-</ul>
+<div>
+    <h3>Moves</h3>
+    <ul>
+        {% for move in moves %}
+        <li>{{ move.replace("-"," ").title() }}</li>
+        {% endfor %}
+    </ul>
+</div>
 
-<h3>Abilities</h3>
-<ul>
-    {% for ability_name in abilities %}
-    <a href="{{ url_for('pokemon_with_ability', ability_name=ability_name) }}">
-        <li>{{ ability_name }}</li>
-    </a>
-</ul>
+<div>
+    <h3>Abilities</h3>
+    <ul>
+        {% for ability_name in abilities %}
+        <a href="{{ url_for('pokemon_with_ability', ability_name=ability_name) }}">
+            <li>{{ ability_name.replace("-"," ").title() }}</li>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
 
-{% endfor %}
+
 <br>
 {% endblock %}
