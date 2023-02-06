@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div>
+<div class="ability">
     <h2>Ability: {{ ability_name.replace("-"," ").title() }}</h2>
 </div>
 
-<div>
+<div class="ability">
     <h3>Pokemon with Ability</h3>
     <ul>
         {% for pokemon_name in pokemon_with_ability %}

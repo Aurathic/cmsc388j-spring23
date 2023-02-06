@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div>
+<div class="pokemon">
     <h2> {{ name.replace("-"," ").title() }}</h2>
     <p> <b>Height:</b> {{ height }} decimeters </p>
     <p> <b>Weight:</b> {{ weight }} hectograms </p>
     <p> <b>Base Experience On Defeat:</b> {{ base_exp }} XP </p>
 </div>
 
-<div>
+<div class="pokemon">
     <h3>Moves</h3>
     <ul>
         {% for move in moves %}
@@ -17,7 +17,7 @@
     </ul>
 </div>
 
-<div>
+<div class="pokemon">
     <h3>Abilities</h3>
     <ul>
         {% for ability_name in abilities %}
