@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+<h2>{{ ability_name }}</h2>
+<h3>Pokemon with Ability</h3>
 <ul>
-    {% for post in posts %}
-    <a href="{{ url_for('profile', username=post.user) }}">
-        <li>{{ post.user }}</li>
+    {% for pokemon_name in pokemon_with_ability %}
+    <a href="{{ url_for('pokemon_info', pokemon_name=pokemon_name) }}">
+        <li>{{ pokemon_name }}</li>
     </a>
-    <h4>> {{ post.text }}</h4>
-    ❤ <b>{{ post.likes }} &#183; {{ post.location }}</b>
     {% endfor %}
 </ul>
 {% endblock %}

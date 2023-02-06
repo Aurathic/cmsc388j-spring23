@@ -12,15 +12,14 @@
     {% endfor %}
 </ul>
 
-
-
 <h3>Abilities</h3>
 <ul>
-    {% for ability_name in abilties %}
+    {% for ability_name in abilities %}
     <a href="{{ url_for('pokemon_with_ability', ability_name=ability_name) }}">
-        <li>{{ ability }}</li>
+        <li>{{ ability_name }}</li>
     </a>
 </ul>
-{% endfor %}
 
+{% endfor %}
+<br>
 {% endblock %}
