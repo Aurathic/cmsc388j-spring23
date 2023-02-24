@@ -3,8 +3,8 @@
 
 <div class="pokemon">
     <h2> {{ name.replace("-"," ").title() }}</h2>
-    <p> <b>Height:</b> {{ height }} decimeters </p>
-    <p> <b>Weight:</b> {{ weight }} hectograms </p>
+    <p> <b>Height:</b> {{ height/10 }} meters </p>
+    <p> <b>Weight:</b> {{ weight/10 }} kilograms </p>
     <p> <b>Base Experience On Defeat:</b> {{ base_exp }} XP </p>
 </div>
 
