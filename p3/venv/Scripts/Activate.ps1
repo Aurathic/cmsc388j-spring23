@@ -246,6 +246,8 @@ if (Test-Path -Path Env:PYTHONHOME) {
 Copy-Item -Path Env:PATH -Destination Env:_OLD_VIRTUAL_PATH
 $Env:PATH = "$VenvExecDir$([System.IO.Path]::PathSeparator)$Env:PATH"
 
+$Env:OMDB_API_KEY = "29301fcf"
+
 # SIG # Begin signature block
 # MIIpigYJKoZIhvcNAQcCoIIpezCCKXcCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
@@ -470,3 +472,4 @@ $Env:PATH = "$VenvExecDir$([System.IO.Path]::PathSeparator)$Env:PATH"
 # UeI7m44utNTSSZCJ9JV7bnniwqztrP/r2PTAxkUywoCzif6R863qJ/uQA0QQjq8t
 # +aR822g6YVyJsLYQKbpEgshG2QwzGHun5HkvawJ8
 # SIG # End signature block
+

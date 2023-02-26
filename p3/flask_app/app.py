@@ -21,7 +21,9 @@ app.config.update(
 
 mongo = PyMongo(app)
 
-client = MovieClient(os.environ.get("OMDB_API_KEY"))
+key = os.environ.get("OMDB_API_KEY")
+print(key)
+client = MovieClient(key)
 
 # --- Do not modify this function ---
 @app.route("/", methods=["GET", "POST"])
@@ -36,6 +38,7 @@ def index():
 
 @app.route("/search-results/<query>", methods=["GET"])
 def query_results(query):
+    print(os.environ.get("OMDB_API_KEY"))
     # return "Query"
     try:
         results = client.search(query)
