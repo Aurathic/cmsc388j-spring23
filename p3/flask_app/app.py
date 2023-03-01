@@ -11,7 +11,7 @@ from flask_app.forms import SearchForm, MovieReviewForm
 from flask_app.model import MovieClient
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/database"
+app.config["MONGO_URI"] = open("../db.ini").readline()
 app.config["SECRET_KEY"] = b"*\x87-\xa3\x02l\xc0\x02\xfe\xa2i\x8dS\x82y\xd4"
 
 app.config.update(
@@ -22,7 +22,6 @@ app.config.update(
 mongo = PyMongo(app)
 
 key = os.environ.get("OMDB_API_KEY")
-print(key)
 client = MovieClient(key)
 
 # --- Do not modify this function ---
@@ -38,8 +37,6 @@ def index():
 
 @app.route("/search-results/<query>", methods=["GET"])
 def query_results(query):
-    print(os.environ.get("OMDB_API_KEY"))
-    # return "Query"
     try:
         results = client.search(query)
     except ValueError as error_msg:
@@ -50,7 +47,26 @@ def query_results(query):
 
 @app.route("/movies/<movie_id>", methods=["GET", "POST"])
 def movie_detail(movie_id):
-    return "movie_detail"
+    try:
+        movie = client.retrieve_movie_by_id(movie_id)
+    except ValueError as error_msg:
+        return render_template("movie_detail.html", error_msg=error_msg)
+    else:
+        form = MovieReviewForm()
+        if request.method == "POST":
+            if form.validate_on_submit():
+                review = {
+                    "imdb_id": movie_id,
+                    "commenter": form.name.data,
+                    "content": form.text.data,
+                    "date": current_time(),
+                }
+                mongo.db.reviews.insert_one(review)
+
+        reviews = mongo.db.reviews.find({"imdb_id": movie_id})
+        return render_template(
+            "movie_detail.html", movie=movie, form=form, reviews=list(reviews)
+        )
 
 
 # Not a view function, used for creating a string for the current time.

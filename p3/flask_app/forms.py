@@ -13,7 +13,7 @@ class SearchForm(FlaskForm):
 
 
 class MovieReviewForm(FlaskForm):
-    name = TextAreaField(
+    name = StringField(
         "Name",
         validators=[InputRequired(), Length(min=1, max=50)],
     )
