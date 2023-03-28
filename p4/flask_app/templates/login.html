@@ -10,10 +10,17 @@
         {# Add link to redirect users to Registration page if they don't have an account #}
     </div>
 </div>
+<!-- Login Form: -->
+<form action="" class="my-2 my-lg-0" method="POST">
+    {{ form.csrf_token }}
+    {{ form.username(class="form-control", placeholder="Username") }}
+    {{ form.password(class="form-control", placeholder="Password") }}
+    {{ form.submit(class="btn btn-outline-success") }}
+</form>
 <div class="row">
     <div class="col">
         {# Optionally show flashed messages if/when you need them,
-            if an authentication or other similar error occurs #}
+        if an authentication or other similar error occurs #}
         {# Login form rendered here with Bootstrap classes #}
     </div>
 </div>

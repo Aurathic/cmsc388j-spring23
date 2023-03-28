@@ -35,11 +35,36 @@ def index():
 
 @app.route('/search-results/<query>', methods=['GET'])
 def query_results(query):
-    return 'Query'
+    try:
+        results = client.search(query)
+    except ValueError as error_msg:
+        return render_template("query_results.html", error_msg=str(error_msg))
+    else:
+        return render_template("query_results.html", results=results)
 
 @app.route('/movies/<movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
-    return 'movie_detail'
+    try:
+        movie = client.retrieve_movie_by_id(movie_id)
+    except ValueError as error_msg:
+        return render_template("movie_detail.html", error_msg=str(error_msg))
+    else:
+        form = MovieReviewForm()
+        if request.method == "POST":
+            if form.validate_on_submit():
+                review = {
+                    "imdb_id": movie_id,
+                    "commenter": form.name.data,
+                    "content": form.text.data,
+                    "date": current_time(),
+                }
+                mongo.db.reviews.insert_one(review)
+
+        reviews = mongo.db.reviews.find({"imdb_id": movie_id})
+        return render_template(
+            "movie_detail.html", movie=movie, form=form, reviews=list(reviews)
+        )
+
 
 # Not a view function, used for creating a string for the current time.
 def current_time() -> str:

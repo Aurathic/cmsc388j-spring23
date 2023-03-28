@@ -54,7 +54,11 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    pass
+    username = StringField(
+        "Username", validators=[InputRequired(), Length(min=1, max=40)]
+    )
+    password = PasswordField("Password", validators=[InputRequired()])
+    submit = submit = SubmitField("Log In")
 
 
 class UpdateUsernameForm(FlaskForm):
