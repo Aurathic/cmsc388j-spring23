@@ -3,25 +3,56 @@
 <div class="row">
     <div class="col">
         {# Profile picture #}
-        <img class="propic" src="data:image/png;base64,{{image}}" alt="image">
+        <img class="propic" src="data:image/png;base64,{{current_user.get_image()}}" alt="image">
     </div>
     <div class="col">
         {# Greeting #}
+        <h1>Welcome, {{current_user.username}}</h1>
     </div>
 </div>
 <div class="row">
     <div class="col">
         {# Username Update Form #}
+        <form action="" method="POST">
+            {{ username_update_form.csrf_token }}
+            {{ username_update_form.username(class="form-control", placeholder="New username") }}
+            {{ username_update_form.submit_username(class="btn btn-outline-success") }}
+        </form>
     </div>
+</div>
+<div class="row">
+    {% if username_update_form.username.errors %}
+    <div class="alert alert-warning" role="alert">
+        {% for error in username_update_form.username.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 <div class="row">
     <div class="col">
         {# Profile Picture Update Form #}
+        <form action="" method="POST" enctype="multipart/form-data">
+            {{ profile_pic_update_form.csrf_token }}
+            {{ profile_pic_update_form.profile_pic(class="form-control") }}
+            {{ profile_pic_update_form.submit_profile_pic(class="btn btn-outline-success") }}
+        </form>
     </div>
+</div>
+<div class="row">
+    {% if profile_pic_update_form.profile_pic.errors %}
+    <div class="alert alert-warning" role="alert">
+        {% for error in profile_pic_update_form.profile_pic.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 <div class="row">
     <div class="col">
         {# Link to see all of the current user's reviews. #}
+        <a href="{{ url_for('user_detail', username=current_user.username) }}" class="btn btn-primary">See User's
+            Reviews</a>
     </div>
 </div>
 {% endblock %}

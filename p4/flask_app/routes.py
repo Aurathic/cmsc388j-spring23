@@ -11,6 +11,7 @@ from flask_login import (
 
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
+import pathlib
 
 # stdlib
 from datetime import datetime
@@ -114,12 +115,8 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.objects(username=form.username.data).first()
-
-        if user is not None and bcrypt.check_password_hash(
-            user.password, form.password.data
-        ):
-            login_user(user)
-            return redirect(url_for("account"))
+        login_user(user)
+        return redirect(url_for("account"))
 
     return render_template("login.html", form=form)
 
@@ -133,4 +130,38 @@ def logout():
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    return render_template("account.html")
+    print("account")
+    username_update_form = UpdateUsernameForm()
+    profile_pic_update_form = UpdateProfilePicForm()
+
+    # If valid, save updated username
+    if (
+        username_update_form.submit_username.data
+        and username_update_form.validate_on_submit()
+    ):
+        current_user.modify(username=username_update_form.username.data)
+        current_user.save()
+
+    # If valid, save updated profile picture
+    print(profile_pic_update_form.submit_profile_pic.data)
+    if (
+        profile_pic_update_form.submit_profile_pic.data
+        and profile_pic_update_form.validate_on_submit()
+    ):
+        img = profile_pic_update_form.profile_pic.data
+        filename = secure_filename(img.filename)
+        content_type = f"img/{pathlib.Path(filename).suffix}"
+
+        # Add new picture if none exists, otherwise update
+        if current_user.profile_pic.get() is None:
+            current_user.profile_pic.put(img.stream, content_type=content_type)
+        else:
+            current_user.profile_pic.replace(img.stream, content_type=content_type)
+        current_user.save()
+        flash("Your profile picture has been updated successfully.", "success")
+
+    return render_template(
+        "account.html",
+        username_update_form=username_update_form,
+        profile_pic_update_form=profile_pic_update_form,
+    )

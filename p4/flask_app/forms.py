@@ -12,9 +12,16 @@ from wtforms.validators import (
     EqualTo,
     ValidationError,
 )
+from flask_login import (
+    LoginManager,
+    current_user,
+    login_user,
+    logout_user,
+    login_required,
+)
 
-
-from .models import User
+from .models import User, Review
+from . import app, bcrypt, client
 
 
 class SearchForm(FlaskForm):
@@ -58,12 +65,41 @@ class LoginForm(FlaskForm):
         "Username", validators=[InputRequired(), Length(min=1, max=40)]
     )
     password = PasswordField("Password", validators=[InputRequired()])
-    submit = submit = SubmitField("Log In")
+    submit = SubmitField("Log In")
+
+    def validate_username(self, username):
+        user = User.objects(username=username.data).first()
+        if user is None:
+            raise ValidationError("Username does not exist")
+
+    def validate_password(self, password):
+        user = User.objects(username=self.username.data).first()
+        if user is not None and not bcrypt.check_password_hash(
+            user.password, password.data
+        ):
+            raise ValidationError("Incorrect password")
 
 
 class UpdateUsernameForm(FlaskForm):
-    pass
+    username = StringField(
+        "Username", validators=[InputRequired(), Length(min=1, max=40)]
+    )
+    submit_username = SubmitField("Update Username")
+
+    def validate_username(self, username):
+        if username.data == current_user.username:
+            raise ValidationError("You must change to a new username")
+        user = User.objects(username=username.data).first()
+        if user is not None:
+            raise ValidationError("Username is taken")
 
 
 class UpdateProfilePicForm(FlaskForm):
-    pass
+    profile_pic = FileField(
+        "Profile Picture",
+        validators=[
+            FileRequired(),
+            FileAllowed(["jpg", "png"], "You can only upload PNG or JPGs"),
+        ],
+    )
+    submit_profile_pic = SubmitField("Update Profile Picture")
