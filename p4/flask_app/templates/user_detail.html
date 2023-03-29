@@ -8,15 +8,29 @@
 <div class="row">
     <div class="col">
         {# User's Profile Picture #}
-        <img class="propic" src="data:image/png;base64,{{image}}" alt="image">
+        <img class="propic" src="data:image/png;base64,{{user.get_image()}}" alt="image">
     </div>
     <div class="col">
         {# Indicate which user's reviews we're looking at #}
+        <h1>{{ reviews|length }} reviews by {{ user.username }}</h1>
     </div>
 </div>
 <div class="row">
     <div class="col">
         {# Show all reviews made by the user #}
+        {% for review in reviews %}
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title clearfix">
+                    <a href="{{ url_for('movie_detail', movie_id=review.imdb_id) }}">
+                        <h5 class="float-left">{{ review.movie_title }}</h5>
+                    </a>
+                    <p class="float-right">{{ review.date }}</p>
+                </div>
+                <p class="card-text">{{ review.content }}</p>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

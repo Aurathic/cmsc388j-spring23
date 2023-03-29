@@ -48,7 +48,6 @@ def query_results(query):
         results = client.search(query)
     except ValueError as e:
         return render_template("query.html", error_msg=str(e))
-
     return render_template("query.html", results=results)
 
 
@@ -68,13 +67,10 @@ def movie_detail(movie_id):
             imdb_id=movie_id,
             movie_title=result.title,
         )
-
         review.save()
-
         return redirect(request.path)
 
     reviews = Review.objects(imdb_id=movie_id)
-
     return render_template(
         "movie_detail.html", form=form, movie=result, reviews=reviews
     )
@@ -82,7 +78,9 @@ def movie_detail(movie_id):
 
 @app.route("/user/<username>")
 def user_detail(username):
-    return "user_detail"
+    user = User.objects(username=username).first()
+    reviews = Review.objects(commenter=user)
+    return render_template("user_detail.html", user=user, reviews=reviews)
 
 
 def custom_404():

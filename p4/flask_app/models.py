@@ -24,7 +24,6 @@ class User(db.Document, UserMixin):
         if self.profile_pic:
             file = self.profile_pic
         else:
-            print(os.getcwd())
             file = open("flask_app/static/images/default_profile_pic.png", "rb")
         image_bytes = io.BytesIO(file.read())
         image = base64.b64encode(image_bytes.getvalue()).decode()
@@ -32,8 +31,8 @@ class User(db.Document, UserMixin):
 
 
 class Review(db.Document):
-    username = db.StringField(unique=True, required=True)
-    review = db.StringField()
+    commenter = db.ReferenceField(User, required=True)
+    content = db.StringField()
     date = db.StringField(required=True)
     imdb_id = db.StringField(required=True, min_length=9, max_length=9)
     movie_title = db.StringField(required=True, min_length=1, max_length=100)
