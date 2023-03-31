@@ -1,40 +1,49 @@
 {% extends "header.html" %}
 {% block content %}
-
-{% if error_msg %}
-<b>{{ error_msg }}</b>
-{% endif %}
-
 {% if movie %}
-
 {# Display card for the movie details #}
-<div class="row">
+<div class="row p-2">
   <div class="col">
     <div class="card text-center">
-      <div class="card-header">
+      <h2 class="card-header">
         {{ movie.title }} ({{ movie.year }})
-      </div>
+      </h2>
       <div class="card-body">
-        <img src="{{ movie.poster_url }}" class="mr-3 movie" alt="alt text">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item"><b>Directed by:</b> {{ movie.director }}</li>
-          <li class="list-group-item"><b>Actors:</b> {{ movie.actors }}</li>
-          <li class="list-group-item"><b>Genres:</b> {{ movie.genres }}</li>
-          <li class="list-group-item"><b>Awards:</b> {{ movie.awards }}</li>
-        </ul>
+        <div class="row">
+          <div class="col">
+            <img src="{{ movie.poster_url }}" class="mr-3 movie" alt="alt text">
+          </div>
+          <div class="col">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>Directed by:</b> {{ movie.director }}</li>
+              <li class="list-group-item"><b>Actors:</b> {{ movie.actors }}</li>
+              <li class="list-group-item"><b>Genres:</b> {{ movie.genres }}</li>
+              <li class="list-group-item"><b>Awards:</b> {{ movie.awards }}</li>
+            </ul>
+            {% if rating %}
+            <div class="card my-4">
+              <h1 class="display-4">{{round(rating,2)}} stars</h1>
+            </div>
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-{# Reviews #}
-<div class="row">
-  <div class="col-md-12">
-    <h1> Reviews <small class="float-right">{{ reviews|length }} reviews</small></h1>
-    <ul class="media-list">
-      {% for review in reviews %}
+<div class="card m-2">
+  {# Reviews #}
+  <h5 class="card-header"> Reviews <small class="float-right">{{ reviews|length }} {{'review' if reviews|length == 1
+      else 'reviews'}}</small></h5>
+  {% if reviews|length == 0 %}
+  <p class="p-4">There are no reviews yet -- be the first!</p>
+  {% else %}
+  <ul class="media-list">
+    {% for review in reviews %}
+    <div class="card p-2 m-2" id="{{review.get_id()}}">
       <li class="media review-item">
-        <img class="mr-3 comment-pic" src="data:image/png;base64,{{review.image}}" alt="">
+        <img class="comment-pic mr-3" src="data:image/png;base64,{{review.commenter.get_image()}}" alt="">
         <div class="media-body">
           <span class="float-right">
             <small>{{ review.date }}</small>
@@ -42,26 +51,45 @@
           <a href="{{ url_for('user_detail', username=review.commenter.username) }}">
             <strong>@{{ review.commenter.username }}</strong>
           </a>
-          <p>
-            {{ review.content }}
-          </p>
+
+          {% if review.rating %}
+          <p><strong>{{review.rating}} {{'star' if review.rating == 1 else 'stars'}}</strong></p>
+          {% endif %}
+          <p> {{ review.content }} </p>
         </div>
       </li>
-      {% endfor %}
-    </ul>
-  </div>
+    </div>
+    {% endfor %}
+  </ul>
+  {% endif %}
 </div>
-
-{% if current_user.is_authenticated %}
-{# Movie review submission form #}
-<div class="row">
-  <div class="col">
+<div class="card m-2">
+  <h5 class="card-header"> Write Your Own Review (max 500 characters)</h5>
+  {% if current_user.is_authenticated %}
+  {# Movie review submission form #}
+  <div class="p-4">
     <form method="POST" action="">
       {{ form.csrf_token }}
-      <div class="form-group">
-        {{ form.text.label }}
-        {{ form.text(class="form-control") }}
+      <div class="form-group form-row">
+        <div class="col-md-1">{{ form.rating.label }}</div>
+        <!-- <div class="col-md-3">{{ form.rating(class="form-control") }}</div> -->
 
+        <table>
+          <tr>
+            {% for subfield in form.rating %}
+            <td class="px-2">{{ subfield.label }}</td>
+            {% endfor %}
+          <tr>
+            {% for subfield in form.rating %}
+            <td class="px-2">{{ subfield }}</td>
+            {% endfor %}
+          <tr>
+        </table>
+      </div>
+
+      <div class="form-group">
+        <!-- {{ form.text.label }} -->
+        {{ form.text(class="form-control") }}
         {% if form.text.errors %}
         <div class="alert alert-warning" role="alert">
           {% for error in form.text.errors %}
@@ -69,12 +97,14 @@
           {% endfor %}
         </div>
         {% endif %}
-
       </div>
-      {{ form.submit() }}
+      {{ form.submit(class="btn btn-outline-success") }}
     </form>
   </div>
+  {% else %}
+  <p class="p-4"><a href="{{ url_for('login') }}">You need to be logged in to leave a review.</a></p>
+  {% endif %}
+
 </div>
-{% endif %}
 {% endif %}
 {% endblock content %}

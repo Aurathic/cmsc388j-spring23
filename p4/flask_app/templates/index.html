@@ -2,11 +2,11 @@
 {% block content %}
 
 <div class="row">
-    <div class="col">
-        <form action="/" class="form-inline my-2 my-lg-0" method="POST">
-            {{ form.csrf_token }}
-            {{ form.search_query(class="form-control", placeholder="Search") }}
+    <div class="col container">
+        <form action=" /" class="form-inline my-2 input-group" method="POST">
 
+            {{ form.csrf_token }}
+            {{ form.search_query(class="form-control", placeholder="Search for movies to read & write reviews") }}
             {% if form.search_query.errors %}
             <div class="alert alert-warning" role="alert">
                 {% for error in form.search_query.errors %}
@@ -15,11 +15,45 @@
             </div>
             {% endif %}
 
-            {{ form.submit(class="btn btn-outline-success") }}
+            <div class="input-group-append">
+                {{ form.submit(class="btn btn-outline-success") }}
+            </div>
         </form>
     </div>
-    <div class="col">
-        <h2>Please use the search bar to search for movies! Then you can review them </h2>
+</div>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
+    <ol class="carousel-indicators">
+        {% for index, _ in enumerate(carousel_movies) %}
+        <li data-target="#carouselExampleIndicators" data-slide-to="{{ index }}"
+            class="{{ 'active' if index==0 else 'inactive' }}"></li>
+        {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+        {% for index, movie in enumerate(carousel_movies) %}
+        <div class="carousel-item {{ 'active' if index==0 else 'inactive' }}">
+            <a href="{{ url_for('movie_detail', movie_id=movie.imdb_id) }}"><img class="d-block w-100"
+                    style="height: 30vw; overflow: hidden; object-fit: cover; filter: brightness(70%)"
+                    src="{{ movie.poster_url }}" alt="Poster for {{ movie.title }}"></a>
+            <div class="carousel-caption d-none d-md-block">
+                <a style="color:white" href="{{ url_for('movie_detail', movie_id=movie.imdb_id) }}">
+                    <h5>Look at reviews of {{ movie.title }}</h5>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="row">
+    <!-- <div class="col">
+        <h2>Please use the search bar to search for movies! Then you can review them </h2>
+    </div> -->
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-import os, io, base64
+import os, io, base64, re
 from flask_login import UserMixin
 from datetime import datetime
 from . import db, login_manager
@@ -32,7 +32,13 @@ class User(db.Document, UserMixin):
 
 class Review(db.Document):
     commenter = db.ReferenceField(User, required=True)
-    content = db.StringField()
+    content = db.StringField(required=True, min_length=5, max_length=500)
     date = db.StringField(required=True)
     imdb_id = db.StringField(required=True, min_length=9, max_length=9)
     movie_title = db.StringField(required=True, min_length=1, max_length=100)
+    rating = db.IntField(min_value=1, max_value=5)
+
+    # Returns unique string identifying our object
+    def get_id(self):
+        stripped_date = re.sub(r"[^A-Za-z0-9\-]", "", self.date)
+        return f"{self.commenter.username}_{stripped_date}"

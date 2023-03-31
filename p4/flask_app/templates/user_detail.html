@@ -1,36 +1,45 @@
 {% extends "header.html" %}
 {% block content %}
-<div class="row">
-    <div class="col">
-        {# Display any error messages #}
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        {# User's Profile Picture #}
-        <img class="propic" src="data:image/png;base64,{{user.get_image()}}" alt="image">
-    </div>
-    <div class="col">
-        {# Indicate which user's reviews we're looking at #}
-        <h1>{{ reviews|length }} reviews by {{ user.username }}</h1>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        {# Show all reviews made by the user #}
-        {% for review in reviews %}
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title clearfix">
-                    <a href="{{ url_for('movie_detail', movie_id=review.imdb_id) }}">
-                        <h5 class="float-left">{{ review.movie_title }}</h5>
-                    </a>
-                    <p class="float-right">{{ review.date }}</p>
-                </div>
-                <p class="card-text">{{ review.content }}</p>
+{% if user %}
+<div class="card p-2 my-2 mx-3">
+    <div class="m-2 row">
+        <div class="col-4">
+            {# Profile picture #}
+            <img class="propic img-thumbnail" src="data:image/png;base64,{{user.get_image()}}" alt="image">
+        </div>
+        <div class="col-8 align-self-center">
+            <div class="align-self-center">
+                {# Indicate which user's reviews we're looking at #}
+                <h1>{{ reviews|length }} {{'review' if reviews|length == 1 else 'reviews'}} by {{ user.username }}</h1>
             </div>
         </div>
-        {% endfor %}
     </div>
 </div>
+
+<div class="d-flex flex-wrap align-items-stretch justify-content-center p-2">
+    {# Show all reviews made by the user #}
+    {% for review in reviews %}
+    <div class="card m-2 p-2" style="width: 100%; min-width: 10em; max_width: 10em" id="{{review.get_id()}}}">
+        <!-- <div class="card-body" style="position: relative;"> -->
+        <div style="position: relative;">
+            <a class="stretched-link"
+                href="{{url_for('movie_detail', movie_id=review.imdb_id)}}#{{review.get_id()}}"></a>
+            <div class="card-title clearfix">
+                <p class="float-right"><small>{{ review.date }}</small></p>
+                <p><a href="{{url_for('movie_detail', movie_id=review.imdb_id)}}">{{ review.movie_title }}</a></p>
+                </a>
+            </div>
+
+            {% if review.rating %}
+            <p><strong>{{review.rating}} stars</strong></p>
+            {% endif %}
+            <p class="card-text">{{ review.content }}</p>
+        </div>
+        <!-- <div class="card-footer">
+            <p class="float-right">{{ review.date }}</p>
+        </div> -->
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

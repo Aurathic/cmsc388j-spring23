@@ -1,58 +1,118 @@
 {% extends "header.html" %}
 {% block content %}
-<div class="row">
-    <div class="col">
-        {# Profile picture #}
-        <img class="propic" src="data:image/png;base64,{{current_user.get_image()}}" alt="image">
-    </div>
-    <div class="col">
-        {# Greeting #}
-        <h1>Welcome, {{current_user.username}}</h1>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        {# Username Update Form #}
-        <form action="" method="POST">
-            {{ username_update_form.csrf_token }}
-            {{ username_update_form.username(class="form-control", placeholder="New username") }}
-            {{ username_update_form.submit_username(class="btn btn-outline-success") }}
-        </form>
+<div class="card p-2 m-2">
+    <div class="m-2 row">
+        <div class="col-4">
+            {# Profile picture #}
+            <img class="propic img-thumbnail" src="data:image/png;base64,{{current_user.get_image()}}" alt="image">
+        </div>
+        <div class="col-8 align-self-center">
+            <div class="align-self-center">
+                {# Greeting #}
+                <h1 class="p-2 text-center">Welcome, {{current_user.username}}!</h1>
+                {# Link to see all of the current user's reviews. #}
+                <a href="{{ url_for('user_detail', username=current_user.username) }}"
+                    class="btn btn-primary btn-lg btn-block">See your
+                    reviews</a>
+            </div>
+        </div>
     </div>
 </div>
-<div class="row">
-    {% if username_update_form.username.errors %}
-    <div class="alert alert-warning" role="alert">
-        {% for error in username_update_form.username.errors %}
-        <span>{{ error }}</span>
-        {% endfor %}
+<div class="card p-4 m-2">
+    {# Username Update Form #}
+    <div class="row">
+        <div class="col">
+            <form action="" method="POST" class="input-group">
+                {{ username_update_form.csrf_token }}
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Change your username</span>
+                </div>
+                {{ username_update_form.username(class="form-control", placeholder="New username") }}
+                <div class="input-group-append">
+                    {{ username_update_form.submit_username(class="btn btn-outline-success") }}
+                </div>
+            </form>
+        </div>
     </div>
-    {% endif %}
-</div>
-<div class="row">
-    <div class="col">
-        {# Profile Picture Update Form #}
-        <form action="" method="POST" enctype="multipart/form-data">
-            {{ profile_pic_update_form.csrf_token }}
-            {{ profile_pic_update_form.profile_pic(class="form-control") }}
-            {{ profile_pic_update_form.submit_profile_pic(class="btn btn-outline-success") }}
-        </form>
+    {# Username Update Errors #}
+    <div class="row">
+        <div class="col">
+            {% if username_update_form.username.errors %}
+            <div class="alert alert-warning" style="width: 100%" role="alert">
+                {% for error in username_update_form.username.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+                <a class="close" data-dismiss="alert" href="#">×</a>
+            </div>
+            {% endif %}
+        </div>
     </div>
-</div>
-<div class="row">
-    {% if profile_pic_update_form.profile_pic.errors %}
-    <div class="alert alert-warning" role="alert">
-        {% for error in profile_pic_update_form.profile_pic.errors %}
-        <span>{{ error }}</span>
-        {% endfor %}
+
+    {# Password Update Form #}
+    <div class="row">
+        <div class="col">
+            <form action="" method="POST" class="input-group">
+                {{ password_update_form.csrf_token }}
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Change your password</span>
+                </div>
+                {{ password_update_form.password(class="form-control", placeholder="New password") }}
+                {{ password_update_form.confirm_password(class="form-control", placeholder="Confirm password") }}
+                <div class="input-group-append">
+                    {{ password_update_form.submit_password(class="btn btn-outline-success") }}
+                </div>
+            </form>
+        </div>
     </div>
-    {% endif %}
-</div>
-<div class="row">
-    <div class="col">
-        {# Link to see all of the current user's reviews. #}
-        <a href="{{ url_for('user_detail', username=current_user.username) }}" class="btn btn-primary">See User's
-            Reviews</a>
+    {# Password Update Errors #}
+    <div class="row">
+        <div class="col">
+            {% if password_update_form.password.errors %}
+            <div class="alert alert-warning" style="width: 100%" role="alert">
+                {% for error in password_update_form.password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+                <a class="close" data-dismiss="alert" href="#">×</a>
+            </div>
+            {% endif %}
+            {% if password_update_form.confirm_password.errors %}
+            <div class="alert alert-warning" style="width: 100%" role="alert">
+                {% for error in password_update_form.confirm_password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+                <a class="close" data-dismiss="alert" href="#">×</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Profile Picture Update Form #}
+    <div class="row">
+        <div class="col">
+            <form action="" method="POST" enctype="multipart/form-data" class="input-group">
+                {{ profile_pic_update_form.csrf_token }}
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Change your profile picture</span>
+                </div>
+                {{ profile_pic_update_form.profile_pic(class="form-control") }}
+                <div class="input-group-append">
+                    {{ profile_pic_update_form.submit_profile_pic(class="btn btn-outline-success") }}
+                </div>
+            </form>
+        </div>
+    </div>
+    {# Profile Picture Update Errors #}
+    <div class="row">
+        <div class="col">
+            {% if profile_pic_update_form.profile_pic.errors %}
+            <div class="alert alert-warning" style="width: 100%" role="alert">
+                {% for error in profile_pic_update_form.profile_pic.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+                <a class="close" data-dismiss="alert" href="#">×</a>
+            </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

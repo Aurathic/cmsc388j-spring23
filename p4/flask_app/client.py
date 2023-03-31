@@ -14,7 +14,11 @@ class Movie(object):
         self.year = omdb_json["Year"]
         self.imdb_id = omdb_json["imdbID"]
         self.type = "Movie"
-        self.poster_url = omdb_json["Poster"]
+        self.poster_url = (
+            omdb_json["Poster"]
+            if omdb_json["Poster"] != "N/A"
+            else "../static/images/default_poster.png"
+        )
 
     def __repr__(self):
         return self.title

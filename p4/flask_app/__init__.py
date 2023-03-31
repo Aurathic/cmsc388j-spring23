@@ -28,6 +28,18 @@ app.config.update(
     SESSION_COOKIE_SAMESITE="Lax",
 )
 
+
+# Inject enumerate into project
+@app.context_processor
+def inject_enumerate():
+    return dict(enumerate=enumerate)
+
+
+@app.context_processor
+def inject_round():
+    return dict(round=round)
+
+
 db = MongoEngine(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"

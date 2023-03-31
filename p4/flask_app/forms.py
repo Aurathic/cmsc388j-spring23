@@ -2,7 +2,15 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from werkzeug.utils import secure_filename
-from wtforms import StringField, IntegerField, SubmitField, TextAreaField, PasswordField
+from wtforms import (
+    StringField,
+    IntegerField,
+    SubmitField,
+    TextAreaField,
+    PasswordField,
+    IntegerRangeField,
+    RadioField,
+)
 from wtforms.validators import (
     InputRequired,
     DataRequired,
@@ -35,6 +43,8 @@ class MovieReviewForm(FlaskForm):
     text = TextAreaField(
         "Comment", validators=[InputRequired(), Length(min=5, max=500)]
     )
+    # rating = IntegerRangeField("Rating", validators=[NumberRange(1, 5)])
+    rating = RadioField("Rating", choices=["No rating", 1, 2, 3, 4, 5])
     submit = SubmitField("Enter Comment")
 
 
@@ -70,28 +80,38 @@ class LoginForm(FlaskForm):
     def validate_username(self, username):
         user = User.objects(username=username.data).first()
         if user is None:
-            raise ValidationError("Username does not exist")
+            raise ValidationError("Username does not exist.")
 
     def validate_password(self, password):
         user = User.objects(username=self.username.data).first()
         if user is not None and not bcrypt.check_password_hash(
             user.password, password.data
         ):
-            raise ValidationError("Incorrect password")
+            raise ValidationError("Incorrect password.")
 
 
 class UpdateUsernameForm(FlaskForm):
     username = StringField(
         "Username", validators=[InputRequired(), Length(min=1, max=40)]
     )
-    submit_username = SubmitField("Update Username")
+    submit_username = SubmitField("Update")
 
     def validate_username(self, username):
         if username.data == current_user.username:
-            raise ValidationError("You must change to a new username")
+            raise ValidationError(
+                "Your new username must be different from your old username."
+            )
         user = User.objects(username=username.data).first()
         if user is not None:
-            raise ValidationError("Username is taken")
+            raise ValidationError("That username is taken.")
+
+
+class UpdatePasswordForm(FlaskForm):
+    password = PasswordField("Password", validators=[InputRequired()])
+    confirm_password = PasswordField(
+        "Confirm Password", validators=[InputRequired(), EqualTo("password")]
+    )
+    submit_password = SubmitField("Update")
 
 
 class UpdateProfilePicForm(FlaskForm):
@@ -99,7 +119,7 @@ class UpdateProfilePicForm(FlaskForm):
         "Profile Picture",
         validators=[
             FileRequired(),
-            FileAllowed(["jpg", "png"], "You can only upload PNG or JPGs"),
+            FileAllowed(["jpg", "png"], "You can only upload PNG or JPGs."),
         ],
     )
-    submit_profile_pic = SubmitField("Update Profile Picture")
+    submit_profile_pic = SubmitField("Update")
