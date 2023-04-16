@@ -22,9 +22,13 @@ from .client import MovieClient
 db = MongoEngine()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
-movie_client = MovieClient(os.environ.get("OMDB_API_KEY"))
+omdb_api_key = "29301fcf"  # TODO figure out why the env variable isn't working
+movie_client = MovieClient(omdb_api_key)
+# movie_client = MovieClient(os.environ.get("OMDB_API_KEY"))
 
-from .routes import main
+# from .routes import main
+from .users.routes import users
+from .movies.routes import movies
 
 
 def page_not_found(e):
@@ -42,9 +46,11 @@ def create_app(test_config=None):
     login_manager.init_app(app)
     bcrypt.init_app(app)
 
-    app.register_blueprint(main)
+    # app.register_blueprint(main)
+    app.register_blueprint(users)
+    app.register_blueprint(movies)
     app.register_error_handler(404, page_not_found)
 
-    login_manager.login_view = "main.login"
+    login_manager.login_view = "movies.login"
 
     return app
