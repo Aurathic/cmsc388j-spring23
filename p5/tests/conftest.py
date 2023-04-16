@@ -43,12 +43,12 @@ class AuthActions(object):
         self._client = client
 
     def register(
-        self, username="test", email="test@test.com", passwrd="test", confirm="test"
+        self, username="test", email="test@test.com", password="test", confirm="test"
     ):
         registration = SimpleNamespace(
             username=username,
             email=email,
-            password=passwrd,
+            password=password,
             confirm_password=confirm,
             submit="Sign Up",
         )

@@ -51,6 +51,6 @@ def create_app(test_config=None):
     app.register_blueprint(movies)
     app.register_error_handler(404, page_not_found)
 
-    login_manager.login_view = "movies.login"
+    login_manager.login_view = "users.login"
 
     return app
