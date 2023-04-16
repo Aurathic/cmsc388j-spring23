@@ -63,7 +63,6 @@ class AuthActions(object):
             password=password,
             submit="Login",
         )
-
         form = LoginForm(formdata=None, obj=login)
         response = self._client.post("/login", data=form.data, follow_redirects=True)
         return response
